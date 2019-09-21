@@ -1,4 +1,6 @@
 import numpy
+import matplotlib.pyplot
+#%matplotlib inline
 import scipy.special
 
 #neural network class definition
@@ -51,10 +53,67 @@ class neuralNetwork:
         final_outputs=self.activation_function(final_inputs)
         return final_outputs
 
-#now new an object
-input_nodes,hidden_nodes,output_nodes=3,3,3
-learning_rate=0.5
+
+#now creat an instance of neural network
+input_nodes,hidden_nodes,output_nodes=784,200,10
+learning_rate=0.1
 
 n=neuralNetwork(input_nodes,hidden_nodes,output_nodes,learning_rate)
-print(n.query([1.0,0.5,-1.5]))
+
+#load the training file
+training_data_file=open("mnist_dataset/mnist_train.csv",'r')
+training_data_list = training_data_file.readlines()
+training_data_file.close()
+#print(len(training_data_list),"\n",training_data_list[0])
+
+#train the network
+import datetime
+start_time=datetime.datetime.now()
+epoches=5
+for e in range(epoches):
+    for record in training_data_list:
+        all_values=record.split(',')
+        inputs=(numpy.asfarray(all_values[1:])/255.0*0.99)+0.01
+        targets=numpy.zeros(output_nodes)+0.01
+        targets[int(all_values[0])]=0.99
+        n.train(inputs,targets)
+
+end_time=datetime.datetime.now()
+print("Start:%s End:%s, Training time is:%s"%(start_time,end_time,end_time-start_time))
+
+#load the test file
+test_data_file=open("mnist_dataset/mnist_test.csv",'r')
+test_data_list = test_data_file.readlines()
+test_data_file.close()
+
+"""
+for counter in range(5):
+    print("Please input the line number you wanna try:")
+    line_number=int(input())
+    if (line_number<1 or line_number>10000):
+        print("Not in range 1-10000")
+        continue
+
+    all_values=test_data_list[line_number-1].split(',')
+    result=n.query((numpy.asfarray(all_values[1:])/255.0*0.99)+0.01)
+    print("The label is:",all_values[0],"\nThe neural network's answer:\n",result*100,"which is ",numpy.argmax(result))
+    image_array=numpy.asfarray(all_values[1:]).reshape((28,28))
+    matplotlib.pyplot.imshow(image_array,cmap='Greys',interpolation='None')
+    matplotlib.pyplot.show()
+"""
+
+start_time=datetime.datetime.now()
+score=0
+for record in test_data_list:
+    all_values=record.split(',')
+    correct_label=int(all_values[0])
+    inputs=(numpy.asfarray(all_values[1:])/255.0*0.99)+0.01
+    outputs=n.query(inputs)
+    label=numpy.argmax(outputs)
+    if(label==correct_label):
+        score+=1
+end_time=datetime.datetime.now()
+print("Start:%s End:%s, Calculate time is:%s"%(start_time,end_time,end_time-start_time))
+print("Epoches:",epoches,"  Learning rate:",learning_rate,"  Hidden nodes number is:",hidden_nodes)
+print("Success rate is:",score/len(test_data_list))
 
