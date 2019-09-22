@@ -55,8 +55,8 @@ class neuralNetwork:
 
 
 #now creat an instance of neural network
-input_nodes,hidden_nodes,output_nodes=784,200,10
-learning_rate=0.1
+input_nodes,hidden_nodes,output_nodes=784,500,10
+learning_rate=0.2
 
 n=neuralNetwork(input_nodes,hidden_nodes,output_nodes,learning_rate)
 
@@ -71,6 +71,7 @@ import datetime
 start_time=datetime.datetime.now()
 epoches=5
 for e in range(epoches):
+    print("Epoch :",e+1)
     for record in training_data_list:
         all_values=record.split(',')
         inputs=(numpy.asfarray(all_values[1:])/255.0*0.99)+0.01
@@ -87,6 +88,7 @@ test_data_list = test_data_file.readlines()
 test_data_file.close()
 
 """
+#Single comparation for one line
 for counter in range(5):
     print("Please input the line number you wanna try:")
     line_number=int(input())
@@ -114,6 +116,6 @@ for record in test_data_list:
         score+=1
 end_time=datetime.datetime.now()
 print("Start:%s End:%s, Calculate time is:%s"%(start_time,end_time,end_time-start_time))
-print("Epoches:",epoches,"  Learning rate:",learning_rate,"  Hidden nodes number is:",hidden_nodes)
-print("Success rate is:",score/len(test_data_list))
+print("Epoches:",epoches,"  Learning rate:",learning_rate,"  Hidden nodes:",hidden_nodes)
+print("Success rate:",(score/len(test_data_list))*100,"%")
 

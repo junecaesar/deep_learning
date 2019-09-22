@@ -7,15 +7,15 @@ print(result)
 
 class Dog:
     def __init__(self,petname,temp):
-        self.name=petname;
-        self.temprature=temp;
+        self.name=petname
+        self.temprature=temp
 
     def status(self):
         print("Dog name is:",self.name)
-        print("Dog temprature is:",self.temprature)
+        print("Dog temprature is:%d"%(self.temprature))
 
     def setTemprature(self,temp):
-        self.temprature=temp;
+        self.temprature=temp
 
     def bark(self):
         print("Woof!")
