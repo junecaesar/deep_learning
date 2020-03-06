@@ -55,13 +55,16 @@ class neuralNetwork:
 
 
 #now creat an instance of neural network
-input_nodes,hidden_nodes,output_nodes=784,500,10
+input_nodes=784
+hidden_nodes=100
+output_nodes=10
 learning_rate=0.2
+epoches=1
 
 n=neuralNetwork(input_nodes,hidden_nodes,output_nodes,learning_rate)
 
 #load the training file
-training_data_file=open("mnist_dataset/mnist_train.csv",'r')
+training_data_file=open("dataset/mnist_train.csv",'r')
 training_data_list = training_data_file.readlines()
 training_data_file.close()
 #print(len(training_data_list),"\n",training_data_list[0])
@@ -69,7 +72,7 @@ training_data_file.close()
 #train the network
 import datetime
 start_time=datetime.datetime.now()
-epoches=5
+
 for e in range(epoches):
     print("Epoch :",e+1)
     for record in training_data_list:
@@ -80,29 +83,33 @@ for e in range(epoches):
         n.train(inputs,targets)
 
 end_time=datetime.datetime.now()
-print("Start:%s End:%s, Training time is:%s"%(start_time,end_time,end_time-start_time))
+print("训练完成\n 开始时间:%s 结束时间:%s, \n训练时长为:%s \n下面你可以测试你的训练结果了"%(start_time,end_time,end_time-start_time))
 
 #load the test file
-test_data_file=open("mnist_dataset/mnist_test.csv",'r')
+#test_data_file=open("[PATH]/mnist_dataset/mnist_test.csv",'r')
+test_data_file=open("dataset/mnist_test.csv",'r')
+#C:\Users\admin\PycharmProjects\deep_learning\dataset
 test_data_list = test_data_file.readlines()
 test_data_file.close()
 
-"""
+
 #Single comparation for one line
-for counter in range(5):
-    print("Please input the line number you wanna try:")
+for counter in range(50):
+    print("Please input the line number you wanna test:")
     line_number=int(input())
+    if(line_number==139):
+        break
     if (line_number<1 or line_number>10000):
         print("Not in range 1-10000")
         continue
 
     all_values=test_data_list[line_number-1].split(',')
     result=n.query((numpy.asfarray(all_values[1:])/255.0*0.99)+0.01)
-    print("The label is:",all_values[0],"\nThe neural network's answer:\n",result*100,"which is ",numpy.argmax(result))
+    print("标签为数字——",all_values[0],"\n神经网络计算10个数字的概率依次为:\n",result*100,"\n概率最高的是数字—— ",numpy.argmax(result))
     image_array=numpy.asfarray(all_values[1:]).reshape((28,28))
     matplotlib.pyplot.imshow(image_array,cmap='Greys',interpolation='None')
     matplotlib.pyplot.show()
-"""
+
 
 start_time=datetime.datetime.now()
 score=0
